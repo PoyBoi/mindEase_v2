@@ -1,9 +1,11 @@
 1. Building the chatbot
     - Need to Get a dataset going
       - Need to merge all the other datasets we found into one big dataset with the same formatting (cannot be unstructured)
-    - Train Lora/ fine tune the model
+    - Train Lora/ fine tune the model (LLAMA 3 8B)
         - Learn how to train a lora
         - See if fine tuning is better or if lora training is better
+    - To train the model on intent (RASA)
+        - Need to introduce an intent classifier
     - See if you can add layer of usage of pyautogen
     - Add a layer of guardrails to prevent the user from missusing the chatbot
 
