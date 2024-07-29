@@ -34,6 +34,9 @@
 - https://github.com/Rogendo/Mental-health-Chatbot
 - https://github.com/pandeyanuradha/Chatbot-for-mental-health
 
+## For intent training (RASA)
+- https://www.youtube.com/watch?v=ykeamfE0-g4
+
 ## Misc
 ### More help
 - https://saifmohammad.com/WebPages/EmotionIntensity-SharedTask.html
