@@ -1,7 +1,7 @@
 import json, os
 from rasa.engine import training
 from rasa.shared.nlu.training_data.formats.rasa import RasaReader
-from rasa.engine.training import 
+# from rasa.engine.training import 
 
 # Load the JSON dataset
 # try:
