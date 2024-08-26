@@ -28,5 +28,7 @@
 
 7. MISC
     - Add multi-user support
-    - Implement pyautogen with the lora model
+    - Implement Agentic Method with the lora model
+        - [ ] PyAutogen
+        - [ ] LangGraph
     - 
