@@ -9,12 +9,11 @@ from transformers import TrainingArguments, Trainer
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"  # Use the first GPU (change if needed)
 # os.environ["HF_DATASETS_CACHE"] = "/path/to/cache"  # Optional: Set a cache directory
 
-# 1. Load your dataset
-data_path = "your_dataset.csv"  # Replace with the path to your CSV file
+data_path = "...\datasets\Conversational Training\CLEANED_Mental_Health_Conversational.csv"
 dataset = load_dataset('csv', data_files=data_path)
 
 # 2. Load your base model and tokenizer
-model_name = "facebook/bart-large-cnn"  # Replace with your desired base model
+model_name = "facebook/bart-large-cnn"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
 # 3. Define preprocessing function
