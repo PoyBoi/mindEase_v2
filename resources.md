@@ -38,6 +38,7 @@
 
 ## For intent training (RASA)
 - https://www.youtube.com/watch?v=ykeamfE0-g4
+- https://www.youtube.com/watch?v=5I8vL2pk_1g
 
 ## Misc
 ### More help
