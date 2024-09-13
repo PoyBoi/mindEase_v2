@@ -27,10 +27,10 @@
 - https://dassum.medium.com/fine-tune-large-language-model-llm-on-a-custom-dataset-with-qlora-fb60abdeba07
 - https://www.reddit.com/r/LocalLLaMA/comments/1967p9z/training_a_lora_on_unstructured_data/
 - [Fine Tuning Tut](https://www.analyticsvidhya.com/blog/2023/08/fine-tuning-large-language-models/)
-- [LoRA w/Ollama](https://www.reddit.com/r/LocalLLaMA/comments/18mxuq0/training_a_model_with_my_own_data/)
+- [LoRA w/Ollama](https://www.reddit.com/r/LocalLLaMA/comments/18mxuq0/training_a_model_with_my_own_data/b n)
 
 ### For mental health assistant:
-- https://medium.com/analytics-vidhya/tackling-depression-with-machine-learning-via-chatbot-1e5f5546f36a
+- https://medium.com/analytics-vidhya/tackling-depression-with-machine-learning-via-chatbot-1e5f5546f36a 
 
 ## Reference Projects
 - https://github.com/Rogendo/Mental-health-Chatbot
