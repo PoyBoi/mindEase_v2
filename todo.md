@@ -1,7 +1,7 @@
 1. Building the chatbot
     - [x] Need to Get a dataset going
       - [x] Need to merge all the other datasets we found into one big dataset with the same formatting (cannot be unstructured)
-    - Train Lora / fine tune the model (LLAMA 3 8B / Nous Hermes 3)
+    - Train Lora / fine tune the model (LLAMA 3.1 8B / Nous Hermes 3)
         - Learn how to train a lora
         - See if fine tuning is better or if lora training is better
     - To train the model on intent (RASA)
@@ -32,3 +32,25 @@
         - [ ] PyAutogen
         - [ ] LangGraph
     - 
+
+# Dataset and Planning:
+1. For fine-tuning the model, need to cherry-pick the reponses, both user and AI, on the basis of (each with a rating/score):
+    - Helpful
+    - Give Guidance
+    - Supportive/Uplifting
+    - Vagueness/Preciseness of the response (Not telling the person what to do, like you get it)
+
+2. The data which we choose to train with, is a continuous process, learns as it goes.
+    - It will learn when it encounters something new, something which is wasn't trained on
+    - Will select message based on above criteria
+
+3. Can incorporate agents
+    - Need to measure the effectiveness
+
+4. Training for the model will be a batch-process
+    - Should have a CI/CD pipeline
+    - If the responses are good, send it for in-person testing
+    - If not, send the data to "bad data"
+
+# To do for now:
+1. Give a basic functional model to anshu
