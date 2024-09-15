@@ -3,3 +3,11 @@ datasets
 peft 
 bitsandbytes
 accelerate
+
+# Intent Classification (RASA)
+spacy == 3.7.5
+tzlocal == 1.5.1
+rasa_core == 0.8.6
+rasa_nlu[spacy] == 0.11.5
+tensorflow == 2.12.0
+keras == 3.5.0
