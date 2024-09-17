@@ -52,5 +52,16 @@
     - If the responses are good, send it for in-person testing
     - If not, send the data to "bad data"
 
+# Intent Classification:
+- Go with either SpaCy or transformers, see which gives better results
+- Clean the dataset
+    - Figure out what the connections to the LLM are
+    - Can I stack model training on another ? Or do I merge the dataset ?
+- Need to figure out to feed data into the mental health prediction and monitoring
+
+# Training model:
+- Can either do LoRA fine tuning
+- Or, can use Unsloth to "fine-tune" my model if the performance isn't as good as expected
+
 # To do for now:
 1. Give a basic functional model to anshu
