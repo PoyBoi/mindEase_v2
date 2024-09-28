@@ -65,3 +65,9 @@
 
 # To do for now:
 1. Give a basic functional model to anshu
+
+# Future Questions:
+1. Go with a big AI firm based model, such as GPT, and fine tune it and use it until we get customers.
+2. We will need to run async jobs if we want the time taken for response to be minimal, what is the optimal TTR ?
+3. We will mostly need to have HttpStreaming enabled for our front end so that the text can actually be streamed and not come in through like a massive blob of text at once.
+4. Database / Backend
