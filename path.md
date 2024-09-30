@@ -33,7 +33,6 @@
     - Need to find the best method to do this
     - Do I use a library or do I fine-tune a model ?
 
-
 - [ ] Training (Q/LoRA) LLM:
     - Need to use "genuine" conversational data
         - Try using one which has actual therapist data
