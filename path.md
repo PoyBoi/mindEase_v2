@@ -31,6 +31,7 @@
             - Had 2 options:
                 - DistilBert Uncased English, going for this as it's more "neutral"
                 - " cased Multi-lingual, not going for this becuase it's supposedly more racist
+            - The reason "type id's" are not applicable is because that was one of the improvements of the distil model from the bert model
 
 - [ ] Emotion Recognition
     - Need to find the best method to do this
