@@ -163,3 +163,4 @@ cython_debug/
 
 /datasets/
 /scripts/training/Model Training/lora_training/
+testingmodel.py
