@@ -32,7 +32,7 @@
                 - DistilBert Uncased English, going for this as it's more "neutral"
                 - " cased Multi-lingual, not going for this becuase it's supposedly more racist
             - The reason "type id's" are not applicable is because that was one of the improvements of the distil model from the bert model
-            - Going with AM(Classification) instead of base AutoModel because AMC provides a classification head and (raw) logits
+            - Going with AM(Classification) instead of base AutoModel because AMC provides a classification head and (raw) logits from the model
 
 - [ ] Emotion Recognition
     - Need to find the best method to do this
