@@ -19,7 +19,7 @@
             - [Using Bi-Directional GAN's with Intent Classification](https://medium.com/@nusfintech.ml/intent-classification-of-texts-using-generative-adversarial-networks-gan-and-bidirectional-29ea2f5ef6a4)
             - [Intent Classification w/Bert](https://hannibunny.github.io/mlbook/transformer/intent_classification_with_bert.html)
         - Model to use:
-            - I will probablly go with distillBert because:
+            - I will probablly go with distilBert because:
                 - ```
                     - Speed and Efficiency: DistilBERT is significantly smaller and faster than XLNet, making it more suitable for real-time applications and resource-constrained environments.
 
@@ -28,6 +28,9 @@
                     - Ease of Use: DistilBERT's smaller size makes it easier to fine-tune and deploy, requiring less computational power and training data.
                     ```
             - Going with this instead of XLNet because XLN has a larger size, more training time, and more time that will be taken to perform downstream inference
+            - Had 2 options:
+                - DistilBert Uncased English, going for this as it's more "neutral"
+                - " cased Multi-lingual, not going for this becuase it's supposedly more racist
 
 - [ ] Emotion Recognition
     - Need to find the best method to do this
