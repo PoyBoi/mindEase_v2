@@ -126,6 +126,7 @@ test_loader = DataLoader(test_dataset, batch_size=32)
 # ==================================================
 # Training Setup
 # ==================================================
+epochs = 5
 
 loss_fn = nn.BCEWithLogitsLoss()  # Use BCEWithLogitsLoss for multi-label classification
 optimizer = optim.Adam(model.parameters(), lr=2e-5)
@@ -135,8 +136,6 @@ accuracy = Accuracy(task='multiclass', num_classes=num_labels).to('cuda')
 # ==================================================
 # Running the training loop
 # ==================================================
-
-epochs = 5
 model.cuda()
 
 for epoch in range(epochs):
