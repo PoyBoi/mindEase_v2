@@ -164,3 +164,4 @@ cython_debug/
 /datasets/
 /scripts/training/Model Training/lora_training/
 testingmodel.py
+your_model_name*.pth
