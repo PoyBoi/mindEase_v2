@@ -59,9 +59,6 @@
     - Can I stack model training on another ? Or do I merge the dataset ?
 - Need to figure out to feed data into the mental health prediction and monitoring
 - Need to figure out if using `DistilBertTokenizer, DistilBertForSequenceClassification` over `AutoModelForSequenceClassification, AutoTokenizer` is better, or the other way around.
-- Need to add the code to the .py file
-    - Make it more modular so that any file can be affixed
-    - Don't let the plot be plotted
 
 # Training model:
 - Can either do LoRA fine tuning
@@ -69,6 +66,19 @@
 
 # To do for now:
 1. Give a basic functional model to anshu
+2. 
+    - .py
+        - Need to add the code to the .py file
+        - Make it more modular so that any file can be affixed
+        - Make .py modular so that it's different code blocks
+        - Don't let the plot be plotted
+    - .ipynb
+        - Add better readability to the .ipynb
+        - Fix the save location for the model and the images
+        - Add other methods to see for improvements to the code
+        - Add TQDM to the training part
+    - General
+        - Clean up the repo, it's too nested
 
 # Future Questions:
 1. Go with a big AI firm based model, such as GPT, and fine tune it and use it until we get customers.
