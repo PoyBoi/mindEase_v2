@@ -167,19 +167,13 @@ for epoch in range(epochs):
     total_f1 = 0 
 
     for batch in train_loader:
-        try:
-            input_ids, attention_mask, labels = [x.to('cuda') for x in batch] 
-        except:
-            input_ids, attention_mask, labels = [x.cuda() for x in batch]
+        input_ids, attention_mask, labels = [x.to('cuda') for x in batch] 
         
         optimizer.zero_grad()
         outputs = model(input_ids, attention_mask=attention_mask)
         logits = outputs
 
-        try:
-            loss = loss_fn(logits.to('cuda'), labels.to('cuda'))
-        except:
-            loss = loss_fn(logits.cuda(), labels.cuda())
+        loss = loss_fn(logits.to('cuda'), labels.to('cuda'))
 
         loss.backward()
         optimizer.step()
@@ -201,34 +195,6 @@ for epoch in range(epochs):
     print(f"Epoch {epoch + 1}/{epochs}")
     print(f"Training loss: {avg_loss:.4f}, Training accuracy: {avg_accuracy:.4f}, Training F1: {avg_f1:.4f}")
 
-    # Validation loop
-    # model.eval()
-    # total_val_loss = 0
-    # total_val_accuracy = 0
-    # total_val_f1 = 0
-
-    # with torch.no_grad():
-    #     for batch in valid_loader:
-    #         input_ids, attention_mask, labels = [x.cuda() for x in batch]
-
-    #         outputs = model(input_ids, attention_mask=attention_mask)
-    #         logits = outputs
-
-    #         val_loss = loss_fn(logits, labels)
-    #         total_val_loss += val_loss.item()
-
-    #         for class_idx in range(num_labels):
-    #             class_accuracy = accuracy(logits[:, class_idx], labels[:, class_idx]) 
-
-    #         f1 = f1_score(logits, labels)
-    #         total_val_f1 += f1 
-
-    # avg_val_loss = total_val_loss / len(valid_loader)
-    # avg_val_accuracy = total_val_accuracy / len(valid_loader)
-    # avg_val_f1 = total_val_f1 / len(valid_loader)
-
-    # print(f"Validation loss: {avg_val_loss:.4f}, Validation accuracy: {avg_val_accuracy:.4f}, Validation F1: {avg_val_f1:.4f}")
-    
     model.eval()
     total_val_loss = 0
     total_val_accuracy = 0
