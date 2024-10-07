@@ -73,8 +73,8 @@
         - Make .py modular so that it's different code blocks
         - Don't let the plot be plotted
     - .ipynb
-        - Add better readability to the .ipynb
-        - Fix the save location for the model and the images
+        - [x] Add better readability to the .ipynb
+        - [x] Fix the save location for the model and the images
         - Add other methods to see for improvements to the code
         - Add TQDM to the training part
     - General
