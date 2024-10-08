@@ -75,7 +75,7 @@
     - .ipynb
         - [x] Add better readability to the .ipynb
         - [x] Fix the save location for the model and the images
-        - Add other methods to see for improvements to the code
+        - [x] Add other methods to see for improvements to the code
         - Add TQDM to the training part
     - General
         - Clean up the repo, it's too nested
