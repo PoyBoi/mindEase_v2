@@ -78,7 +78,12 @@
         - [x] Add other methods to see for improvements to the code
         - Add TQDM to the training part
     - General
-        - Clean up the repo, it's too nested
+        - Clean up the repo, it's too nested (nasty)
+
+3. NOC:
+    - Initital Goal Report (12th Oct)
+    - Mid-way report (27th Oct)
+    - Final Report (3rd week Nov)
 
 # Future Questions:
 1. Go with a big AI firm based model, such as GPT, and fine tune it and use it until we get customers.
