@@ -33,6 +33,8 @@
                 - " cased Multi-lingual, not going for this becuase it's supposedly more racist
             - The reason "type id's" are not applicable is because that was one of the improvements of the distil model from the bert model
             - Going with AM(Classification) instead of base AutoModel because AMC provides a classification head and (raw) logits from the model
+            - Finished training the model
+            - Flatten the 3 column into a 2 column dataset
 
 - [ ] Emotion Recognition
     - Need to find the best method to do this
@@ -52,3 +54,8 @@
     - Need to make a graph-able dataset that can be shown to the user
     - Need to be able to track their moods (use intent recognition)
         - Or I can just use that dataset which I have for this reason
+
+- [ ] Integrate memory management
+    - It should be like the model should develop links between people and their relationship to the user
+    - Can be used when the user utters their name later on
+    - eg: Lauren -> Mother -> Absusive, Darren -> Father -> Comfort Space
