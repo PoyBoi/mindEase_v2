@@ -3,9 +3,9 @@
       - [x] Need to merge all the other datasets we found into one big dataset with the same formatting (cannot be unstructured)
     - Train Lora / fine tune the model (LLAMA 3.1 8B / Nous Hermes 3)
         - Learn how to train a lora
-        - See if fine tuning is better or if lora training is better
-    - To train the model on intent (RASA)
-        - Need to introduce an intent classifier
+        - [x] See if fine tuning is better or if lora training is better (Long answer short, LORA is better, alt use MLX or QSloth)
+    - [x] To train the model on intent (RASA)
+        - [x] Need to introduce an intent classifier
     - See if you can add layer of usage of pyautogen
     - Add a layer of guardrails to prevent the user from missusing the chatbot
 
@@ -78,10 +78,10 @@
         - [x] Add other methods to see for improvements to the code
         - Add TQDM to the training part
     - General
-        - Clean up the repo, it's too nested (nasty)
+        - [x] Clean up the repo, it's too nested (nasty)
 
 3. NOC:
-    - Initital Goal Report (12th Oct)
+    - [x] Initital Goal Report (12th Oct)
     - Mid-way report (27th Oct)
     - Final Report (3rd week Nov)
 
