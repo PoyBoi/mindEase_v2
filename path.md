@@ -60,4 +60,15 @@
 - [ ] Integrate memory management
     - It should be like the model should develop links between people and their relationship to the user
     - Can be used when the user utters their name later on
-    - eg: Lauren -> Mother -> Absusive, Darren -> Father -> Comfort Space
+        - eg: Lauren -> Mother -> Absusive, Darren -> Father -> Comfort Space
+    - How to:
+        - Intent Recognition: Your existing intent recognition model continues to classify user intents.
+        - Entity Recognition: Implement a Named Entity Recognition (NER) model to identify entities (people, locations, etc.) in the user's text.
+        - Memory Linking:
+            - When the user introduces a new relationship:
+            - Extract the entities and the relationship from the user's input using NER and potentially rule-based methods.
+            - Store this relationship in your knowledge graph.
+        - When the user mentions an entity:
+            - Use NER to identify the entity.
+            - Query your knowledge graph to retrieve relevant linked information.
+        - Dialogue Management: Your chatbot uses the identified intent and the retrieved memory context to generate a suitable response.
