@@ -53,12 +53,13 @@
     - If not, send the data to "bad data"
 
 # Intent Classification:
-- Go with either SpaCy or transformers, see which gives better results
+- [x] Go with either SpaCy or transformers, see which gives better results
 - Clean the dataset
     - Figure out what the connections to the LLM are
     - Can I stack model training on another ? Or do I merge the dataset ?
 - Need to figure out to feed data into the mental health prediction and monitoring
-- Need to figure out if using `DistilBertTokenizer, DistilBertForSequenceClassification` over `AutoModelForSequenceClassification, AutoTokenizer` is better, or the other way around.
+- [x] Need to figure out if using `DistilBertTokenizer, DistilBertForSequenceClassification` over `AutoModelForSequenceClassification, AutoTokenizer` is better, or the other way around.
+- [ ] IMP: Make the pipeline for the LLM to use the IR (A dictionary which it draws from)
 
 # Training model:
 - Can either do LoRA fine tuning

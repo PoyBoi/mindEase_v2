@@ -35,8 +35,11 @@
             - Going with AM(Classification) instead of base AutoModel because AMC provides a classification head and (raw) logits from the model
             - Finished training the model
             - Flatten the 3 column into a 2 column dataset
-                - Instead of this, clean up the dataset and make it so that there's a pipeline on what to do
+                - [x] Instead of this, clean up the dataset and make it so that there's a pipeline on what to do
+                    - Balanced the dataset as well
+                    - [] Need to make a pipeline for the IR to work on
                 - Combine the datasets and make the labels universal
+                    - See if this is viable post model training (only do this if the output isn't good)
 
 - [ ] Emotion Recognition
     - Need to find the best method to do this
