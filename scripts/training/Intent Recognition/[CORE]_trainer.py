@@ -18,35 +18,33 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from transformers import AutoModelForSequenceClassification, AutoTokenizer, get_linear_schedule_with_warmup
 
+from Tools.depFiles.readJson import load_config
+from Tools.depFiles.datasetHandler import ds_split, set_files
+
+
 # ========================================
 # User Def Area
 # ========================================
 
-# Custom Name to give to the trained model
-customName = "DepressionSave_1e"
+current_dir = os.path.dirname(os.path.abspath(__file__))
 
-file_loc = r"C:\Users\parvs\VSC Codes\Python-root\_Projects_Personal\mindEase_v2\datasets\Intent Training\balanced_dataset.csv"
-# "C:\Users\parvs\VSC Codes\Python-root\_Projects_Personal\mindEase_v2\datasets\Conversational Training\Intent Based\Small_talk_Intent.csv"
+config_path = os.path.join(current_dir,"training_info.json")
+config = load_config(config_path)
 
-# Name of the folder to be used as a root, for saving model and for running from it
-ds_folder = r"C:\Users\parvs\VSC Codes\Python-root\_Projects_Personal\mindEase_v2\scripts\training\Intent Recognition\Results"
-
-# model name to fine tune on
-model_name = "distilbert/distilbert-base-uncased" 
-
-# Name of the files that are saved in the end, and used again
-train_file_custom_name = r"C:\Users\parvs\VSC Codes\Python-root\_Projects_Personal\mindEase_v2\datasets\Intent Training\Intermediatory Saves\train.csv"
-val_file_custom_name = r"C:\Users\parvs\VSC Codes\Python-root\_Projects_Personal\mindEase_v2\datasets\Intent Training\Intermediatory Saves\val.csv"
-test_file_custom_name = r"C:\Users\parvs\VSC Codes\Python-root\_Projects_Personal\mindEase_v2\datasets\Intent Training\Intermediatory Saves\test.csv"
-
-className = "label" # Usually with the name "Intent", depends file to file
-gpuMode = 'cuda' # 'cpu'
-
-epochs = 70
-learningRate = 1e-5 # 1e-5, 2e-5(wasn't as good), 3e-5
-
-# Inference Prompt:
-ifPrompt = "How do I know that I am depressed"
+customName, file_loc, ds_folder, model_name, train_file_custom_name, val_file_custom_name, test_file_custom_name, className, gpuMode, epochs, learningRate, ifPrompt = (
+    config["customName"],
+    config["file_loc"],
+    config["ds_folder"],
+    config["model_name"],
+    config["train_file_custom_name"],
+    config["val_file_custom_name"],
+    config["test_file_custom_name"],
+    config["className"],
+    config["gpuMode"],
+    config["epochs"],
+    config["learningRate"],
+    config["ifPrompt"]
+)
 
 # ========================================
 # DS Separation
@@ -70,42 +68,6 @@ test_data.to_csv(os.path.join(save_loc, test_file_custom_name), index=False)
 
 print("Datasets have been split and saved successfully.")
 
-# ========================================
-# Conversion Area
-# ========================================
-
-if customName == "":
-    customName = "savedModel"
-
-if ds_folder == "":
-    ds_folder = r'C:\Users\parvs\VSC Codes\Python-root\_Projects_Personal\mindEase_v2\datasets\Conversational Training\Intent Based\difDs'
-
-if model_name == "":
-    model_name = "distilbert/distilbert-base-uncased" 
-
-if train_file_custom_name == "":
-    train_file_custom_name = 'train.csv'
-
-if val_file_custom_name == "":
-    train_file_custom_name = 'val.csv'
-
-if test_file_custom_name == "":
-    train_file_custom_name = 'test.csv'
-
-if learningRate == "":
-    learningRate = "1e-5"
-
-# ========================================
-# Dep Def
-# ========================================
-
-sns.set_theme(style='whitegrid', palette='muted', font_scale=1.2)
-HAPPY_COLORS_PALETTE = ["#01BEFE", "#FFDD00", "#FF7D00", "#FF006D", "#ADFF02", "#8F00FF"]
-sns.set_palette(sns.color_palette(HAPPY_COLORS_PALETTE))
-rcParams['figure.figsize'] = 12, 8
-
-warnings.filterwarnings("ignore")
-
 trainfile = os.path.join(ds_folder, train_file_custom_name)
 validfile = os.path.join(ds_folder, val_file_custom_name)
 testfile = os.path.join(ds_folder, test_file_custom_name)
@@ -113,6 +75,15 @@ testfile = os.path.join(ds_folder, test_file_custom_name)
 traindf = pd.read_csv(trainfile)
 validdf = pd.read_csv(validfile)
 testdf = pd.read_csv(testfile)
+
+trainfeatures = traindf.copy()
+trainlabels = trainfeatures.pop(className)
+
+testfeatures = testdf.copy()
+testlabels = testfeatures.pop(className)
+
+validfeatures = validdf.copy()
+validlabels = validfeatures.pop(className)
 
 plt.ioff()
 
@@ -126,14 +97,12 @@ tokenizer = AutoTokenizer.from_pretrained(model_name)
 # Feature Def
 # ========================================
 
-trainfeatures = traindf.copy()
-trainlabels = trainfeatures.pop(className)
+sns.set_theme(style='whitegrid', palette='muted', font_scale=1.2)
+HAPPY_COLORS_PALETTE = ["#01BEFE", "#FFDD00", "#FF7D00", "#FF006D", "#ADFF02", "#8F00FF"]
+sns.set_palette(sns.color_palette(HAPPY_COLORS_PALETTE))
+rcParams['figure.figsize'] = 12, 8
 
-testfeatures = testdf.copy()
-testlabels = testfeatures.pop(className)
-
-validfeatures = validdf.copy()
-validlabels = validfeatures.pop(className)
+warnings.filterwarnings("ignore")
 
 chart = sns.countplot(x=trainlabels, palette=HAPPY_COLORS_PALETTE)
 plt.title("Number of texts per intent")
