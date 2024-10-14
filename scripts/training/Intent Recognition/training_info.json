@@ -1,0 +1,14 @@
+{
+    "customName": "DepressionSave_1e",
+    "file_loc": "C:\\Users\\parvs\\VSC Codes\\Python-root\\_Projects_Personal\\mindEase_v2\\datasets\\Intent Training\\balanced_dataset.csv",
+    "ds_folder": "C:\\Users\\parvs\\VSC Codes\\Python-root\\_Projects_Personal\\mindEase_v2\\scripts\\training\\Intent Recognition\\Results",
+    "model_name": "distilbert/distilbert-base-uncased",
+    "train_file_custom_name": "C:\\Users\\parvs\\VSC Codes\\Python-root\\_Projects_Personal\\mindEase_v2\\datasets\\Intent Training\\Intermediatory Saves\\train.csv",
+    "val_file_custom_name": "C:\\Users\\parvs\\VSC Codes\\Python-root\\_Projects_Personal\\mindEase_v2\\datasets\\Intent Training\\Intermediatory Saves\\val.csv",
+    "test_file_custom_name": "C:\\Users\\parvs\\VSC Codes\\Python-root\\_Projects_Personal\\mindEase_v2\\datasets\\Intent Training\\Intermediatory Saves\\test.csv",
+    "className": "label",
+    "gpuMode": "cuda",
+    "epochs": 70,
+    "learningRate": 1e-5,
+    "ifPrompt": "How do I know that I am depressed"
+}
