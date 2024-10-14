@@ -19,7 +19,8 @@ from sklearn.model_selection import train_test_split
 from transformers import AutoModelForSequenceClassification, AutoTokenizer, get_linear_schedule_with_warmup
 
 from Tools.depFiles.readJson import load_config
-from Tools.depFiles.datasetHandler import ds_split, set_files
+from Tools.depFiles.datasetHandler import ds_split_set, eval_img
+from Tools.depFiles.modelHandler import model_eval, predict_intent
 
 
 # ========================================
@@ -29,7 +30,10 @@ from Tools.depFiles.datasetHandler import ds_split, set_files
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
 config_path = os.path.join(current_dir,"training_info.json")
-config = load_config(config_path)
+
+config = load_config(
+    config_path
+)
 
 customName, file_loc, ds_folder, model_name, train_file_custom_name, val_file_custom_name, test_file_custom_name, className, gpuMode, epochs, learningRate, ifPrompt = (
     config["customName"],
@@ -46,50 +50,19 @@ customName, file_loc, ds_folder, model_name, train_file_custom_name, val_file_cu
     config["ifPrompt"]
 )
 
-# ========================================
-# DS Separation
-# ========================================
+config_ds = ds_split_set(
+    file_loc, ds_folder, className, 
+    train_file_custom_name, val_file_custom_name, test_file_custom_name
+)
 
-# Load the dataset
-dataset = pd.read_csv(file_loc)
-
-# Split the dataset into training and temporary datasets
-train_data, temp_data = train_test_split(dataset, test_size=0.4, random_state=42)
-
-# Split the temporary dataset into validation and test datasets
-val_data, test_data = train_test_split(temp_data, test_size=0.4, random_state=42)
-
-# Save the datasets to separate files
-save_loc = ds_folder
-
-train_data.to_csv(os.path.join(save_loc, train_file_custom_name), index=False)
-val_data.to_csv(os.path.join(save_loc, val_file_custom_name), index=False)
-test_data.to_csv(os.path.join(save_loc, test_file_custom_name), index=False)
-
-print("Datasets have been split and saved successfully.")
-
-trainfile = os.path.join(ds_folder, train_file_custom_name)
-validfile = os.path.join(ds_folder, val_file_custom_name)
-testfile = os.path.join(ds_folder, test_file_custom_name)
-
-traindf = pd.read_csv(trainfile)
-validdf = pd.read_csv(validfile)
-testdf = pd.read_csv(testfile)
-
-trainfeatures = traindf.copy()
-trainlabels = trainfeatures.pop(className)
-
-testfeatures = testdf.copy()
-testlabels = testfeatures.pop(className)
-
-validfeatures = validdf.copy()
-validlabels = validfeatures.pop(className)
-
-plt.ioff()
-
-# ========================================
-# Model DL
-# ========================================
+trainfeatures, trainlabels, testfeatures, testlabels, validfeatures, validlabels = (
+        config_ds["trainfeatures"],
+        config_ds["trainlabels"],
+        config_ds["testfeatures"],
+        config_ds["testlabels"],
+        config_ds["validfeatures"],
+        config_ds["validlabels"]
+)
 
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
@@ -104,16 +77,15 @@ rcParams['figure.figsize'] = 12, 8
 
 warnings.filterwarnings("ignore")
 
+plt.ioff()
 chart = sns.countplot(x=trainlabels, palette=HAPPY_COLORS_PALETTE)
 plt.title("Number of texts per intent")
 chart.set_xticklabels(chart.get_xticklabels(), rotation=69, horizontalalignment='right', fontsize=8)
 
-# Get the x-axis entries
 x_axis_entries = [tick.get_text() for tick in chart.get_xticklabels()]
 len_dims = len(x_axis_entries)
 
 label_encoder = LabelEncoder()
-
 trainlabels = label_encoder.fit_transform(trainlabels.values)
 testlabels = label_encoder.transform(testlabels.values)
 validlabels = label_encoder.transform(validlabels.values)
@@ -247,115 +219,22 @@ print(f"Model saved to {saved_model_name}")
 # ========================================
 # Plotting Accuracy/F1/Loss
 # ========================================
-plt.ioff()
-# Convert tensors to numpy arrays
-train_accuracies_np = [acc.cpu().numpy() for acc in train_accuracies]
-val_accuracies_np = [acc.cpu().numpy() for acc in val_accuracies]
-train_losses_np = train_losses  # These should already be float values
-val_losses_np = val_losses  # These should already be float values
-train_f1_scores_np = [f1.cpu().numpy() for f1 in train_f1_scores]
-val_f1_scores_np = [f1.cpu().numpy() for f1 in val_f1_scores]
-
-# Plotting Accuracy
-plt.figure(figsize=(10, 5))
-plt.plot(range(1, epochs + 1), train_accuracies_np, label='Training Accuracy')
-plt.plot(range(1, epochs + 1), val_accuracies_np, label='Validation Accuracy')
-plt.xlabel('Epochs')
-plt.ylabel('Accuracy')
-plt.title('Training and Validation Accuracy over Epochs')
-plt.legend()
-plt.grid(True)
-plt.savefig(f'accuracy_plot_{epochs}_{avg_val_accuracy:.4f}.png')
-# plt.close()
-# plt.show()
-
-# Plotting Loss
-plt.figure(figsize=(10, 5))
-plt.plot(range(1, epochs + 1), train_losses_np, label='Training Loss')
-plt.plot(range(1, epochs + 1), val_losses_np, label='Validation Loss')
-plt.xlabel('Epochs')
-plt.ylabel('Loss')
-plt.title('Training and Validation Loss over Epochs')
-plt.legend()
-plt.grid(True)
-plt.savefig(f'loss_plot_{epochs}_{avg_val_accuracy:.4f}.png')
-# plt.close()
-# plt.show()
-
-# Plotting F1 Score
-plt.figure(figsize=(10, 5))
-plt.plot(range(1, epochs + 1), train_f1_scores_np, label='Training F1 Score')
-plt.plot(range(1, epochs + 1), val_f1_scores_np, label='Validation F1 Score')
-plt.xlabel('Epochs')
-plt.ylabel('F1 Score')
-plt.title('Training and Validation F1 Score over Epochs')
-plt.legend()
-plt.grid(True)
-plt.savefig(f'f1_score_plot_{epochs}_{avg_val_accuracy:.4f}.png')
-# plt.close()
-# plt.show()
-
-print(f"Plots have been saved as 'accuracy_plot_{epochs}_{avg_val_accuracy:.4f}.png', 'loss_plot_{epochs}_{avg_val_accuracy:.4f}.png', and 'f1_score_plot_{epochs}_{avg_val_accuracy:.4f}.png'")
-
+eval_img(
+    epoch, avg_val_accuracy, train_accuracies, val_accuracies, 
+    train_losses, val_losses, train_f1_scores, val_f1_scores
+)
 # ========================================
 # Model testing / eval
 # ========================================
 
-# Testing the Model
-model.eval()
+model.eval() # Putting the model in testing mode
 
-total_test_loss = 0
-total_test_accuracy = 0
-total_test_f1 = 0
+model_eval(
+    model, test_loader, gpuMode, 
+    loss_fn, accuracy, f1_score
+)
 
-with torch.no_grad():
-    for batch in test_loader:
-        input_ids, attention_mask, labels = [x.to(gpuMode) for x in batch]
-
-        logits = model(input_ids, attention_mask=attention_mask)
-
-        test_loss = loss_fn(logits, labels)
-        total_test_loss += test_loss.item()
-        total_test_accuracy += accuracy(logits, labels)
-        total_test_f1 += f1_score(logits, labels)
-
-avg_test_loss = total_test_loss / len(test_loader)
-avg_test_accuracy = total_test_accuracy / len(test_loader)
-avg_test_f1 = total_test_f1 / len(test_loader)
-
-print(f"Test loss: {avg_test_loss:.4f}, Test accuracy: {avg_test_accuracy:.4f}, Test F1: {avg_test_f1:.4f}")
-
-# ========================================
-# Model Inference
-# ========================================
-
-def predict_intent(text, model, tokenizer, label_encoder, device):
-    # Prepare the input
-    inputs = tokenizer(text, padding=True, truncation=True, return_tensors="pt")
-    input_ids = inputs['input_ids'].to(device)
-    attention_mask = inputs['attention_mask'].to(device)
-
-    # Set the model to evaluation mode
-    model.eval()
-
-    # Perform inference
-    with torch.no_grad():
-        logits = model(input_ids, attention_mask=attention_mask)
-
-    # Get the predicted class
-    predicted_class = torch.argmax(logits, dim=1).item()
-
-    # Convert the predicted class back to the original label
-    predicted_intent = label_encoder.inverse_transform([predicted_class])[0]
-
-    return predicted_intent
-
-# Load the saved model
-model = IntentClassifier(model_name, num_labels)
-model.load_state_dict(torch.load(saved_model_name))
-model.to(gpuMode)
-
-# Example usage
-text = ifPrompt
-predicted_intent = predict_intent(text, model, tokenizer, label_encoder, gpuMode)
-print(f"The predicted intent for '{text}' is: {predicted_intent}")
+predict_intent(
+    ifPrompt, model, tokenizer, label_encoder, 
+    gpuMode, IntentClassifier, model_name, num_labels, saved_model_name
+)
