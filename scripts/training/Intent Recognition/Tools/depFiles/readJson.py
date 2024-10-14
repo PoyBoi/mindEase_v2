@@ -16,6 +16,27 @@ def load_config(json_file_path):
     epochs = config.get("epochs")
     learningRate = config.get("learningRate")
     ifPrompt = config.get("ifPrompt")
+
+    if customName == "":
+        customName = "savedModel"
+
+    if ds_folder == "":
+        ds_folder = r''
+
+    if model_name == "":
+        model_name = "distilbert/distilbert-base-uncased" 
+
+    if train_file_custom_name == "":
+        train_file_custom_name = 'train.csv'
+
+    if val_file_custom_name == "":
+        train_file_custom_name = 'val.csv'
+
+    if test_file_custom_name == "":
+        train_file_custom_name = 'test.csv'
+
+    if learningRate == "":
+        learningRate = "1e-5"
     
     return {
         "customName": customName,
