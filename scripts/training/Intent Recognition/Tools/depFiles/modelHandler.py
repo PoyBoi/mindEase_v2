@@ -134,3 +134,13 @@ def train_model(model, train_loader, valid_loader, optimizer, scheduler, loss_fn
     torch.save(model.state_dict(), saved_model_name)
 
     print(f"Model saved to {saved_model_name}")
+
+    return{
+        "epoch",
+        "val_losses", 
+        "val_accuracies", 
+        "val_f1_scores", 
+        "train_losses", 
+        "train_accuracies", 
+        "train_f1_scores"
+    }
