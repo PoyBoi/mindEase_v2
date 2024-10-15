@@ -1,7 +1,6 @@
 import torch
 from tqdm import tqdm
 
-
 def model_eval(
     model, test_loader, gpuMode, 
     loss_fn, accuracy, f1_score
