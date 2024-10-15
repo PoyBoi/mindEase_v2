@@ -216,6 +216,7 @@ torch.save(model.state_dict(), saved_model_name)
 print(f"Validation loss: {avg_val_loss:.4f}, Validation accuracy: {avg_val_accuracy:.4f}, Validation F1: {avg_val_f1:.4f}")
 print(f"Model saved to {saved_model_name}")
 
+
 # ========================================
 # Plotting Accuracy/F1/Loss
 # ========================================
