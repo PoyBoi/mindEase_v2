@@ -20,7 +20,7 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer, get_
 
 from Tools.depFiles.readJson import load_config
 from Tools.depFiles.datasetHandler import ds_split_set, eval_img
-from Tools.depFiles.modelHandler import model_eval, predict_intent
+from Tools.depFiles.modelHandler import model_eval, predict_intent, train_model, train_one_epoch, validate_one_epoch
 
 
 # ========================================
@@ -139,82 +139,14 @@ f1_score = F1Score(task='multiclass', num_classes=num_labels, average='macro').t
 # ========================================
 # Training Loop
 # ========================================
+device = torch.device("cuda" if gpuMode == 'cuda' and torch.cuda.is_available() else "cpu")
+model.to(device)
 
-if gpuMode == 'cuda':
-    model.cuda()
-elif gpuMode == 'cpu':
-    model.cpu()
-
-train_losses, train_accuracies, train_f1_scores, val_losses, val_accuracies, val_f1_scores = [], [], [], [], [], []
-
-for epoch in range(epochs):
-
-    model.train()
-    total_loss = 0
-    total_accuracy = 0
-    total_f1 = 0 
-
-    for batch in train_loader:
-
-        input_ids, attention_mask, labels = [x.to(gpuMode) for x in batch] 
-
-        
-        optimizer.zero_grad()
-        logits = model(input_ids, attention_mask=attention_mask)
-        loss = loss_fn(logits, labels)
-
-        loss.backward()
-        optimizer.step()
-        scheduler.step()
-
-        total_loss += loss.item()
-
-        total_accuracy += accuracy(logits, labels)
-        total_f1 += f1_score(logits, labels)
-
-    avg_loss = total_loss / len(train_loader)
-    avg_accuracy = total_accuracy / len(train_loader)
-    avg_f1 = total_f1 / len(train_loader)
-
-    train_losses.append(avg_loss)
-    train_accuracies.append(avg_accuracy)
-    train_f1_scores.append(avg_f1)
-
-    print(f"Epoch {epoch + 1}/{epochs}")
-    print(f"Training loss: {avg_loss:.4f}, Training accuracy: {avg_accuracy:.4f}, Training F1: {avg_f1:.4f}")
-
-    model.eval()
-    total_val_loss = 0
-    total_val_accuracy = 0
-    total_val_f1 = 0
-
-    with torch.no_grad():
-        for batch in valid_loader:
-            input_ids, attention_mask, labels = [x.to(gpuMode) for x in batch]
-
-            logits = model(input_ids, attention_mask=attention_mask)
-
-            val_loss = loss_fn(logits, labels)
-            total_val_loss += val_loss.item()
-            total_val_accuracy += accuracy(logits, labels)
-            total_val_f1 += f1_score(logits, labels)
-
-    avg_val_loss = total_val_loss / len(valid_loader)
-    avg_val_accuracy = total_val_accuracy / len(valid_loader)
-    avg_val_f1 = total_val_f1 / len(valid_loader)
-
-    val_losses.append(avg_val_loss)
-    val_accuracies.append(avg_val_accuracy)
-    val_f1_scores.append(avg_val_f1)
-
-    print(f"Validation loss: {avg_val_loss:.4f}, Validation accuracy: {avg_val_accuracy:.4f}, Validation F1: {avg_val_f1:.4f}")
-
-saved_model_name = f"{customName}_{epochs}_{avg_val_accuracy:.4f}.pth"
-
-torch.save(model.state_dict(), saved_model_name)
-
-print(f"Validation loss: {avg_val_loss:.4f}, Validation accuracy: {avg_val_accuracy:.4f}, Validation F1: {avg_val_f1:.4f}")
-print(f"Model saved to {saved_model_name}")
+train_model(
+    model, 
+    train_loader, valid_loader, optimizer, scheduler, 
+    loss_fn, accuracy, f1_score, epochs, device, customName
+)
 
 
 # ========================================
