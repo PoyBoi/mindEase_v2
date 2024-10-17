@@ -142,11 +142,13 @@ f1_score = F1Score(task='multiclass', num_classes=num_labels, average='macro').t
 device = torch.device("cuda" if gpuMode == 'cuda' and torch.cuda.is_available() else "cpu")
 model.to(device)
 
-train_model(
-    model, 
-    train_loader, valid_loader, optimizer, scheduler, 
-    loss_fn, accuracy, f1_score, epochs, device, customName
-)
+(
+epoch, avg_val_accuracy, train_accuracies, val_accuracies,
+train_losses, val_losses, train_f1_scores, val_f1_scores
+) = train_model(
+    model, train_loader, valid_loader, optimizer, 
+    scheduler, loss_fn, accuracy, f1_score, epochs, device, customName
+).values()
 
 # ========================================
 # Plotting Accuracy/F1/Loss
