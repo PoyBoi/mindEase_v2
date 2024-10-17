@@ -103,11 +103,7 @@ def validate_one_epoch(model, valid_loader, loss_fn, accuracy, f1_score, device)
     avg_val_accuracy = total_val_accuracy / len(valid_loader)
     avg_val_f1 = total_val_f1 / len(valid_loader)
 
-    return {
-        "avg_val_loss": avg_val_loss, 
-        "avg_val_accuracy" : avg_val_accuracy, 
-        "avg_val_f1": avg_val_f1
-    }
+    return avg_val_loss, avg_val_accuracy, avg_val_f1
 
 def train_model(model, train_loader, valid_loader, optimizer, scheduler, loss_fn, accuracy, f1_score, epochs, device, customName):
     train_losses, train_accuracies, train_f1_scores = [], [], []
@@ -139,12 +135,13 @@ def train_model(model, train_loader, valid_loader, optimizer, scheduler, loss_fn
 
     print(f"Model saved to {saved_model_name}")
 
-    return{
-        "epoch",
-        "val_losses", 
-        "val_accuracies", 
-        "val_f1_scores", 
-        "train_losses", 
-        "train_accuracies", 
-        "train_f1_scores"
+    return {
+        "epoch": epochs,
+        "avg_val_accuracy": val_accuracies[-1],
+        "train_accuracies": train_accuracies,
+        "val_accuracies": val_accuracies,
+        "train_losses": train_losses,
+        "val_losses": val_losses,
+        "train_f1_scores": train_f1_scores,
+        "val_f1_scores": val_f1_scores
     }
