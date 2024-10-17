@@ -170,5 +170,5 @@ model_eval(
 
 predict_intent(
     ifPrompt, model, tokenizer, label_encoder, 
-    gpuMode, IntentClassifier, model_name, num_labels, saved_model_name
+    gpuMode, IntentClassifier, model_name, num_labels, customName
 )
