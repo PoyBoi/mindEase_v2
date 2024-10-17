@@ -22,6 +22,7 @@ from Tools.depFiles.readJson import load_config
 from Tools.depFiles.datasetHandler import ds_split_set, eval_img
 from Tools.depFiles.modelHandler import model_eval, predict_intent, train_model, train_one_epoch, validate_one_epoch
 
+print("\nLoaded all Imports\n")
 
 # ========================================
 # User Def Area
@@ -66,6 +67,8 @@ trainfeatures, trainlabels, testfeatures, testlabels, validfeatures, validlabels
 
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
+print("\nLoaded JSON\n")
+
 # ========================================
 # Feature Def
 # ========================================
@@ -89,6 +92,8 @@ label_encoder = LabelEncoder()
 trainlabels = label_encoder.fit_transform(trainlabels.values)
 testlabels = label_encoder.transform(testlabels.values)
 validlabels = label_encoder.transform(validlabels.values)
+
+print("\nDefined Features\n")
 
 # ========================================
 # Model Def
@@ -136,11 +141,15 @@ scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=0, num_t
 accuracy = Accuracy(task='multiclass', num_classes=num_labels).to(gpuMode) 
 f1_score = F1Score(task='multiclass', num_classes=num_labels, average='macro').to(gpuMode)
 
+print("\nLoaded and Prepared Datasets via DataLoader\n")
+
 # ========================================
 # Training Loop
 # ========================================
 device = torch.device("cuda" if gpuMode == 'cuda' and torch.cuda.is_available() else "cpu")
 model.to(device)
+
+print("\nMoved model to GPU\n")
 
 (
 epoch, avg_val_accuracy, train_accuracies, val_accuracies,
@@ -149,6 +158,8 @@ train_losses, val_losses, train_f1_scores, val_f1_scores
     model, train_loader, valid_loader, optimizer, 
     scheduler, loss_fn, accuracy, f1_score, epochs, device, customName
 ).values()
+
+print("\nFinished Training Model\n")
 
 # ========================================
 # Plotting Accuracy/F1/Loss
@@ -162,6 +173,7 @@ eval_img(
 # ========================================
 
 model.eval() # Putting the model in testing mode
+print("\nModel for Evaluation\n")
 
 model_eval(
     model, test_loader, gpuMode, 
@@ -172,3 +184,5 @@ predict_intent(
     ifPrompt, model, tokenizer, label_encoder, 
     gpuMode, IntentClassifier, model_name, num_labels, customName
 )
+
+print("\nRun Complete\n")
