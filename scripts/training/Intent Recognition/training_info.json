@@ -10,5 +10,5 @@
     "gpuMode": "cuda",
     "epochs": 70,
     "learningRate": 1e-5,
-    "ifPrompt": "How do I know that I am depressed"
+    "ifPrompt": "How do I know that I am depressed ?"
 }
