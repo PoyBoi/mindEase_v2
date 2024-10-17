@@ -55,13 +55,16 @@ def predict_intent(
 # Model Training Loop
 # ========================================
 
+import torch
+from tqdm import tqdm
+
 def train_one_epoch(model, train_loader, optimizer, scheduler, loss_fn, accuracy, f1_score, device):
     model.train()
     total_loss = 0
     total_accuracy = 0
     total_f1 = 0
 
-    for batch in tqdm(train_loader, desc="Training", leave=False):
+    for batch in train_loader:
         input_ids, attention_mask, labels = [x.to(device) for x in batch]
 
         optimizer.zero_grad()
@@ -89,7 +92,7 @@ def validate_one_epoch(model, valid_loader, loss_fn, accuracy, f1_score, device)
     total_val_f1 = 0
 
     with torch.no_grad():
-        for batch in tqdm(valid_loader, desc="Validation", leave=False):
+        for batch in valid_loader:
             input_ids, attention_mask, labels = [x.to(device) for x in batch]
 
             logits = model(input_ids, attention_mask=attention_mask)
@@ -109,17 +112,14 @@ def train_model(model, train_loader, valid_loader, optimizer, scheduler, loss_fn
     train_losses, train_accuracies, train_f1_scores = [], [], []
     val_losses, val_accuracies, val_f1_scores = [], [], []
 
-    for epoch in range(epochs):
-        print(f"Epoch {epoch + 1}/{epochs}")
-
+    progress_bar = tqdm(range(epochs), desc="Training Progress")
+    for epoch in progress_bar:
         train_loss, train_accuracy, train_f1 = train_one_epoch(
             model, train_loader, optimizer, scheduler, loss_fn, accuracy, f1_score, device
         )
         train_losses.append(train_loss)
         train_accuracies.append(train_accuracy)
         train_f1_scores.append(train_f1)
-
-        print(f"Training loss: {train_loss:.4f}, Training accuracy: {train_accuracy:.4f}, Training F1: {train_f1:.4f}")
 
         val_loss, val_accuracy, val_f1 = validate_one_epoch(
             model, valid_loader, loss_fn, accuracy, f1_score, device
@@ -128,12 +128,18 @@ def train_model(model, train_loader, valid_loader, optimizer, scheduler, loss_fn
         val_accuracies.append(val_accuracy)
         val_f1_scores.append(val_f1)
 
-        print(f"Validation loss: {val_loss:.4f}, Validation accuracy: {val_accuracy:.4f}, Validation F1: {val_f1:.4f}")
+        progress_bar.set_postfix({
+            'Epoch': epoch + 1,
+            'Train Loss': f'{train_loss:.4f}',
+            'Train Acc': f'{train_accuracy:.4f}',
+            'Val Loss': f'{val_loss:.4f}',
+            'Val Acc': f'{val_accuracy:.4f}'
+        })
 
     saved_model_name = f"{customName}_{epochs}_{val_accuracies[-1]:.4f}.pth"
     torch.save(model.state_dict(), saved_model_name)
 
-    print(f"Model saved to {saved_model_name}")
+    print(f"\nModel saved to {saved_model_name}")
 
     return {
         "epoch": epochs,
