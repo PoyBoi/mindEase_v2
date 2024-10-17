@@ -148,7 +148,6 @@ train_model(
     loss_fn, accuracy, f1_score, epochs, device, customName
 )
 
-
 # ========================================
 # Plotting Accuracy/F1/Loss
 # ========================================
