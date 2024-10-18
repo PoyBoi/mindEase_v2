@@ -115,7 +115,7 @@ import torch
 from tqdm import tqdm
 
 def train_model(
-        save_path, model, 
+        save_path, model, lr,
         train_loader, valid_loader, optimizer, scheduler, 
         loss_fn, accuracy, f1_score, epochs, device, customName
     ):
@@ -176,7 +176,7 @@ def train_model(
 ## Training Parameters
 - Epochs: {epochs}
 - Optimizer: {optimizer.__class__.__name__}
-- Learning Rate: {optimizer.param_groups[0]['lr']}
+- Learning Rate: {lr}
 - Loss Function: {loss_fn.__class__.__name__}
 - Device: {device}
 

@@ -161,7 +161,7 @@ print("\nMoved model to GPU\n")
 epoch, avg_val_accuracy, train_accuracies, val_accuracies,
 train_losses, val_losses, train_f1_scores, val_f1_scores, saved_model_loc
 ) = train_model(
-    result_path, model, train_loader, valid_loader, optimizer, 
+    result_path, model, learningRate, train_loader, valid_loader, optimizer, 
     scheduler, loss_fn, accuracy, f1_score, epochs, device, customName
 ).values()
 
