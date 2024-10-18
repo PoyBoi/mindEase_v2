@@ -52,6 +52,7 @@ def ds_split_set(
     }
 
 def eval_img(
+    save_path,
     epochs, avg_val_accuracy,
     train_accuracies, val_accuracies,
     train_losses, val_losses,
@@ -80,7 +81,7 @@ def eval_img(
     plt.title('Training and Validation Accuracy over Epochs')
     plt.legend()
     plt.grid(True)
-    plt.savefig(f'accuracy_plot_{epochs}_{avg_val_accuracy:.4f}.png')
+    plt.savefig(os.path.join(save_path, f'accuracy_plot_{epochs}_{avg_val_accuracy:.4f}.png'))
     # plt.close()
     # plt.show()
 
@@ -93,7 +94,7 @@ def eval_img(
     plt.title('Training and Validation Loss over Epochs')
     plt.legend()
     plt.grid(True)
-    plt.savefig(f'loss_plot_{epochs}_{avg_val_accuracy:.4f}.png')
+    plt.savefig(os.path.join(save_path, f'loss_plot_{epochs}_{avg_val_accuracy:.4f}.png'))
     # plt.close()
     # plt.show()
 
@@ -106,7 +107,7 @@ def eval_img(
     plt.title('Training and Validation F1 Score over Epochs')
     plt.legend()
     plt.grid(True)
-    plt.savefig(f'f1_score_plot_{epochs}_{avg_val_accuracy:.4f}.png')
+    plt.savefig(os.path.join(save_path, f'f1_score_plot_{epochs}_{avg_val_accuracy:.4f}.png'))
     # plt.close()
     # plt.show()
 

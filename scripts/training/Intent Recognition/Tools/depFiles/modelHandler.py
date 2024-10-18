@@ -1,4 +1,4 @@
-import torch
+import os, torch
 from tqdm import tqdm
 
 def model_eval(
@@ -108,7 +108,11 @@ def validate_one_epoch(model, valid_loader, loss_fn, accuracy, f1_score, device)
 
     return avg_val_loss, avg_val_accuracy, avg_val_f1
 
-def train_model(model, train_loader, valid_loader, optimizer, scheduler, loss_fn, accuracy, f1_score, epochs, device, customName):
+def train_model(
+        save_path, model, 
+        train_loader, valid_loader, optimizer, scheduler, 
+        loss_fn, accuracy, f1_score, epochs, device, customName
+    ):
     train_losses, train_accuracies, train_f1_scores = [], [], []
     val_losses, val_accuracies, val_f1_scores = [], [], []
 
@@ -136,7 +140,7 @@ def train_model(model, train_loader, valid_loader, optimizer, scheduler, loss_fn
             'Val Acc': f'{val_accuracy:.4f}'
         })
 
-    saved_model_name = f"{customName}_{epochs}_{val_accuracies[-1]:.4f}.pth"
+    saved_model_name = os.path.join(save_path, f"{customName}_{epochs}_{val_accuracies[-1]:.4f}.pth")
     torch.save(model.state_dict(), saved_model_name)
 
     print(f"\nModel saved to {saved_model_name}")

@@ -3,6 +3,7 @@
 # ========================================
 
 import os, shutil, warnings, torch, json
+from datetime import datetime
 import pandas as pd
 
 import torch.nn as nn
@@ -50,6 +51,11 @@ customName, file_loc, ds_folder, model_name, train_file_custom_name, val_file_cu
     config["learningRate"],
     config["ifPrompt"]
 )
+
+current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+result_path = os.path.join(current_dir, "Results", f"{customName}_{epochs}_{learningRate}_{current_time}")
+os.makedirs(result_path, exist_ok=True)
 
 config_ds = ds_split_set(
     file_loc, ds_folder, className, 
@@ -155,7 +161,7 @@ print("\nMoved model to GPU\n")
 epoch, avg_val_accuracy, train_accuracies, val_accuracies,
 train_losses, val_losses, train_f1_scores, val_f1_scores
 ) = train_model(
-    model, train_loader, valid_loader, optimizer, 
+    result_path, model, train_loader, valid_loader, optimizer, 
     scheduler, loss_fn, accuracy, f1_score, epochs, device, customName
 ).values()
 
