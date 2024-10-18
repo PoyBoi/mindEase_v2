@@ -77,6 +77,7 @@
             - [x] JSON file for config
             - [x] Save the model along with the pictures to a FOLDER of the name
             - [x] In the folder, add the methods that were used (LR, amount of steps, functions, etc)
+                - [x] Add the correct LR in the .md file
     - .ipynb
         - [x] Add better readability to the .ipynb
         - [x] Fix the save location for the model and the images
