@@ -54,7 +54,7 @@ customName, file_loc, ds_folder, model_name, train_file_custom_name, val_file_cu
 
 current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-result_path = os.path.join(current_dir, "Results", f"{customName}_{epochs}_{learningRate}_{current_time}")
+result_path = os.path.join(current_dir, "Results", f"{current_time}_{customName}_{epochs}_{learningRate}")
 os.makedirs(result_path, exist_ok=True)
 
 config_ds = ds_split_set(
