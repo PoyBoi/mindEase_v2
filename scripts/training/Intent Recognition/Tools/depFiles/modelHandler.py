@@ -153,5 +153,6 @@ def train_model(
         "train_losses": train_losses,
         "val_losses": val_losses,
         "train_f1_scores": train_f1_scores,
-        "val_f1_scores": val_f1_scores
+        "val_f1_scores": val_f1_scores,
+        "saved_model_loc": saved_model_name
     }

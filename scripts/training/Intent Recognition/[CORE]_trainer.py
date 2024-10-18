@@ -159,7 +159,7 @@ print("\nMoved model to GPU\n")
 
 (
 epoch, avg_val_accuracy, train_accuracies, val_accuracies,
-train_losses, val_losses, train_f1_scores, val_f1_scores
+train_losses, val_losses, train_f1_scores, val_f1_scores, saved_model_loc
 ) = train_model(
     result_path, model, train_loader, valid_loader, optimizer, 
     scheduler, loss_fn, accuracy, f1_score, epochs, device, customName
@@ -171,7 +171,7 @@ print("\nFinished Training Model\n")
 # Plotting Accuracy/F1/Loss
 # ========================================
 eval_img(
-    epoch, avg_val_accuracy, train_accuracies, val_accuracies, 
+    result_path, epoch, avg_val_accuracy, train_accuracies, val_accuracies, 
     train_losses, val_losses, train_f1_scores, val_f1_scores
 )
 # ========================================
@@ -188,7 +188,7 @@ model_eval(
 
 predict_intent(
     ifPrompt, model, tokenizer, label_encoder, 
-    gpuMode, IntentClassifier, model_name, num_labels, customName
+    gpuMode, IntentClassifier, model_name, num_labels, saved_model_loc
 )
 
 print("\nRun Complete\n")
