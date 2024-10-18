@@ -48,7 +48,7 @@ customName, file_loc, ds_folder, model_name, train_file_custom_name, val_file_cu
     config["className"],
     config["gpuMode"],
     config["epochs"],
-    config["learningRate"],
+    float(config["learningRate"]),
     config["ifPrompt"]
 )
 
