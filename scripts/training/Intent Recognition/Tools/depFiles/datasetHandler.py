@@ -51,6 +51,12 @@ def ds_split_set(
         "validlabels" : validlabels
     }
 
+import os
+import warnings
+import matplotlib.pyplot as plt
+import seaborn as sns
+from matplotlib import rcParams
+
 def eval_img(
     save_path,
     epochs, avg_val_accuracy,
@@ -61,7 +67,7 @@ def eval_img(
     sns.set_theme(style='whitegrid', palette='muted', font_scale=1.2)
     HAPPY_COLORS_PALETTE = ["#01BEFE", "#FFDD00", "#FF7D00", "#FF006D", "#ADFF02", "#8F00FF"]
     sns.set_palette(sns.color_palette(HAPPY_COLORS_PALETTE))
-    rcParams['figure.figsize'] = 12, 8
+    rcParams['figure.figsize'] = 20, 6  # Increased width to accommodate three subplots
 
     warnings.filterwarnings("ignore")
     # Convert tensors to numpy arrays
@@ -72,43 +78,41 @@ def eval_img(
     train_f1_scores_np = [f1.cpu().numpy() for f1 in train_f1_scores]
     val_f1_scores_np = [f1.cpu().numpy() for f1 in val_f1_scores]
 
+    # Create a single figure with three subplots
+    fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(20, 6))
+    fig.suptitle('Training and Validation Metrics over Epochs', fontsize=16)
+
     # Plotting Accuracy
-    plt.figure(figsize=(10, 5))
-    plt.plot(range(1, epochs + 1), train_accuracies_np, label='Training Accuracy')
-    plt.plot(range(1, epochs + 1), val_accuracies_np, label='Validation Accuracy')
-    plt.xlabel('Epochs')
-    plt.ylabel('Accuracy')
-    plt.title('Training and Validation Accuracy over Epochs')
-    plt.legend()
-    plt.grid(True)
-    plt.savefig(os.path.join(save_path, f'accuracy_plot_{epochs}_{avg_val_accuracy:.4f}.png'))
-    # plt.close()
-    # plt.show()
+    ax1.plot(range(1, epochs + 1), train_accuracies_np, label='Training Accuracy')
+    ax1.plot(range(1, epochs + 1), val_accuracies_np, label='Validation Accuracy')
+    ax1.set_xlabel('Epochs')
+    ax1.set_ylabel('Accuracy')
+    ax1.set_title('Accuracy')
+    ax1.legend()
+    ax1.grid(True)
 
     # Plotting Loss
-    plt.figure(figsize=(10, 5))
-    plt.plot(range(1, epochs + 1), train_losses_np, label='Training Loss')
-    plt.plot(range(1, epochs + 1), val_losses_np, label='Validation Loss')
-    plt.xlabel('Epochs')
-    plt.ylabel('Loss')
-    plt.title('Training and Validation Loss over Epochs')
-    plt.legend()
-    plt.grid(True)
-    plt.savefig(os.path.join(save_path, f'loss_plot_{epochs}_{avg_val_accuracy:.4f}.png'))
-    # plt.close()
-    # plt.show()
+    ax2.plot(range(1, epochs + 1), train_losses_np, label='Training Loss')
+    ax2.plot(range(1, epochs + 1), val_losses_np, label='Validation Loss')
+    ax2.set_xlabel('Epochs')
+    ax2.set_ylabel('Loss')
+    ax2.set_title('Loss')
+    ax2.legend()
+    ax2.grid(True)
 
     # Plotting F1 Score
-    plt.figure(figsize=(10, 5))
-    plt.plot(range(1, epochs + 1), train_f1_scores_np, label='Training F1 Score')
-    plt.plot(range(1, epochs + 1), val_f1_scores_np, label='Validation F1 Score')
-    plt.xlabel('Epochs')
-    plt.ylabel('F1 Score')
-    plt.title('Training and Validation F1 Score over Epochs')
-    plt.legend()
-    plt.grid(True)
-    plt.savefig(os.path.join(save_path, f'f1_score_plot_{epochs}_{avg_val_accuracy:.4f}.png'))
-    # plt.close()
-    # plt.show()
+    ax3.plot(range(1, epochs + 1), train_f1_scores_np, label='Training F1 Score')
+    ax3.plot(range(1, epochs + 1), val_f1_scores_np, label='Validation F1 Score')
+    ax3.set_xlabel('Epochs')
+    ax3.set_ylabel('F1 Score')
+    ax3.set_title('F1 Score')
+    ax3.legend()
+    ax3.grid(True)
 
-    print(f"Plots have been saved as 'accuracy_plot_{epochs}_{avg_val_accuracy:.4f}.png', 'loss_plot_{epochs}_{avg_val_accuracy:.4f}.png', and 'f1_score_plot_{epochs}_{avg_val_accuracy:.4f}.png'")
+    # Adjust layout and save the figure
+    plt.tight_layout()
+    plot_filename = f'combined_metrics_plot_{epochs}_{avg_val_accuracy:.4f}.png'
+    plt.savefig(os.path.join(save_path, plot_filename))
+    plt.close()
+
+    print(f"Combined plot has been saved as '{plot_filename}'")
