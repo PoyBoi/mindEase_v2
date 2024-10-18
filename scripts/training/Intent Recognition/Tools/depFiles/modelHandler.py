@@ -1,5 +1,6 @@
 import os, torch
 from tqdm import tqdm
+from datetime import datetime
 
 def model_eval(
     model, test_loader, gpuMode, 
@@ -144,6 +145,64 @@ def train_model(
     torch.save(model.state_dict(), saved_model_name)
 
     print(f"\nModel saved to {saved_model_name}")
+
+    # Create and write the Markdown file
+    md_content = f"""
+# Model Training Information
+
+## Model Name
+{customName}
+
+## Training Date
+{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+
+## Model Architecture
+```python
+{model.__class__.__name__}
+{str(model)}
+```
+
+## Training Parameters
+- Epochs: {epochs}
+- Optimizer: {optimizer.__class__.__name__}
+- Learning Rate: {optimizer.param_groups[0]['lr']}
+- Loss Function: {loss_fn.__class__.__name__}
+- Device: {device}
+
+## Learning Rate Scheduler
+{scheduler.__class__.__name__}
+
+## Performance Metrics
+### Training
+- Final Loss: {train_losses[-1]:.4f}
+- Final Accuracy: {train_accuracies[-1]:.4f}
+- Final F1 Score: {train_f1_scores[-1]:.4f}
+
+### Validation
+- Final Loss: {val_losses[-1]:.4f}
+- Final Accuracy: {val_accuracies[-1]:.4f}
+- Final F1 Score: {val_f1_scores[-1]:.4f}
+
+## Training Progress
+| Epoch | Train Loss | Train Accuracy | Train F1 | Val Loss | Val Accuracy | Val F1 |
+|-------|------------|----------------|----------|----------|--------------|--------|
+{' '.join([f"| {i+1} | {tl:.4f} | {ta:.4f} | {tf:.4f} | {vl:.4f} | {va:.4f} | {vf:.4f} |\\n" for i, (tl, ta, tf, vl, va, vf) in enumerate(zip(train_losses, train_accuracies, train_f1_scores, val_losses, val_accuracies, val_f1_scores))])}
+
+## Data Loaders
+- Training Samples: {len(train_loader.dataset)}
+- Validation Samples: {len(valid_loader.dataset)}
+- Batch Size: {train_loader.batch_size}
+
+## Additional Notes
+- Custom Name: {customName}
+- Saved Model Path: {saved_model_name}
+"""
+
+    md_file_path = os.path.join(save_path, f"{customName}_training_info.md")
+    with open(md_file_path, 'w') as f:
+        f.write(md_content)
+
+    print(f"Training information saved to {md_file_path}")
 
     return {
         "epoch": epochs,
