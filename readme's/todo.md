@@ -76,7 +76,7 @@
             - [x] Apply TQDM to the CLI training module
             - [x] JSON file for config
             - [x] Save the model along with the pictures to a FOLDER of the name
-            - [ ] In the folder, add the methods that were used (LR, amount of steps, functions, etc)
+            - [x] In the folder, add the methods that were used (LR, amount of steps, functions, etc)
     - .ipynb
         - [x] Add better readability to the .ipynb
         - [x] Fix the save location for the model and the images
