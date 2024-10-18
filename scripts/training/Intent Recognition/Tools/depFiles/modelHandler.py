@@ -109,6 +109,11 @@ def validate_one_epoch(model, valid_loader, loss_fn, accuracy, f1_score, device)
 
     return avg_val_loss, avg_val_accuracy, avg_val_f1
 
+import os
+from datetime import datetime
+import torch
+from tqdm import tqdm
+
 def train_model(
         save_path, model, 
         train_loader, valid_loader, optimizer, scheduler, 
@@ -144,7 +149,13 @@ def train_model(
     saved_model_name = os.path.join(save_path, f"{customName}_{epochs}_{val_accuracies[-1]:.4f}.pth")
     torch.save(model.state_dict(), saved_model_name)
 
-    print(f"\nModel saved to {saved_model_name}")
+    print(f"Model saved to {saved_model_name}")
+
+    # Create the table content separately
+    table_content = "| Epoch | Train Loss | Train Accuracy | Train F1 | Val Loss | Val Accuracy | Val F1 |\n"
+    table_content += "|-------|------------|----------------|----------|----------|--------------|--------|\n"
+    for i, (tl, ta, tf, vl, va, vf) in enumerate(zip(train_losses, train_accuracies, train_f1_scores, val_losses, val_accuracies, val_f1_scores)):
+        table_content += f"| {i+1} | {tl:.4f} | {ta:.4f} | {tf:.4f} | {vl:.4f} | {va:.4f} | {vf:.4f} |\n"
 
     # Create and write the Markdown file
     md_content = f"""
@@ -184,10 +195,7 @@ def train_model(
 - Final F1 Score: {val_f1_scores[-1]:.4f}
 
 ## Training Progress
-| Epoch | Train Loss | Train Accuracy | Train F1 | Val Loss | Val Accuracy | Val F1 |
-|-------|------------|----------------|----------|----------|--------------|--------|
-{' '.join([f"| {i+1} | {tl:.4f} | {ta:.4f} | {tf:.4f} | {vl:.4f} | {va:.4f} | {vf:.4f} |\\n" for i, (tl, ta, tf, vl, va, vf) in enumerate(zip(train_losses, train_accuracies, train_f1_scores, val_losses, val_accuracies, val_f1_scores))])}
-
+{table_content}
 ## Data Loaders
 - Training Samples: {len(train_loader.dataset)}
 - Validation Samples: {len(valid_loader.dataset)}
