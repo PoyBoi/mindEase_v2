@@ -85,6 +85,10 @@
         - Add TQDM to the training part
     - General
         - [x] Clean up the repo, it's too nested (nasty)
+3. Model Improvement
+    - [ ] Apply suggestions from people to improve the validation value
+        - Things like changing the LR config, adding gradient descent, adding drop out, etc
+    
 
 3. NOC:
     - [x] Initital Goal Report (12th Oct)
