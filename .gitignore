@@ -174,3 +174,4 @@ your_model_name*.pth
 links.md
 
 *.csv
+/scripts/training/Intent Recognition/Results/*
