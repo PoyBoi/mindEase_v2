@@ -8,7 +8,7 @@
     "test_file_custom_name": "C:\\Users\\parvs\\VSC Codes\\Python-root\\_Projects_Personal\\mindEase_v2\\datasets\\Intent Training\\Intermediatory Saves\\test.csv",
     "className": "label",
     "gpuMode": "cuda",
-    "epochs": 70,
+    "epochs": 100,
     "learningRate": 1e-5,
     "ifPrompt": "How do I know that I am depressed ?"
 }
