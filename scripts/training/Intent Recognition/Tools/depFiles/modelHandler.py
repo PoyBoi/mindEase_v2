@@ -1,6 +1,9 @@
 import os, torch
+import numpy as np
 from tqdm import tqdm
 from datetime import datetime
+from sklearn.model_selection import KFold
+from torch.optim.lr_scheduler import ReduceLROnPlateau
 
 def model_eval(
     model, test_loader, gpuMode, 
@@ -73,8 +76,8 @@ def train_one_epoch(model, train_loader, optimizer, scheduler, loss_fn, accuracy
         loss = loss_fn(logits, labels)
 
         loss.backward()
+        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
         optimizer.step()
-        scheduler.step()
 
         total_loss += loss.item()
         total_accuracy += accuracy(logits, labels)
@@ -109,18 +112,14 @@ def validate_one_epoch(model, valid_loader, loss_fn, accuracy, f1_score, device)
 
     return avg_val_loss, avg_val_accuracy, avg_val_f1
 
-import os
-from datetime import datetime
-import torch
-from tqdm import tqdm
-
-def train_model(
-        save_path, model, lr,
-        train_loader, valid_loader, optimizer, scheduler, 
-        loss_fn, accuracy, f1_score, epochs, device, customName
-    ):
+def train_model(save_path, model, lr, train_loader, valid_loader, optimizer, scheduler, loss_fn, accuracy, f1_score, epochs, device, customName):
     train_losses, train_accuracies, train_f1_scores = [], [], []
     val_losses, val_accuracies, val_f1_scores = [], [], []
+
+    best_val_accuracy = 0
+    best_model = None
+    patience = 10
+    no_improvement = 0
 
     progress_bar = tqdm(range(epochs), desc="Training Progress")
     for epoch in progress_bar:
@@ -138,6 +137,22 @@ def train_model(
         val_accuracies.append(val_accuracy)
         val_f1_scores.append(val_f1)
 
+        if isinstance(scheduler, ReduceLROnPlateau):
+            scheduler.step(val_loss)
+        else:
+            scheduler.step()
+
+        if val_accuracy > best_val_accuracy:
+            best_val_accuracy = val_accuracy
+            best_model = model.state_dict()
+            no_improvement = 0
+        else:
+            no_improvement += 1
+
+        if no_improvement >= patience:
+            print(f"Early stopping triggered after {epoch + 1} epochs")
+            break
+
         progress_bar.set_postfix({
             'Epoch': epoch + 1,
             'Train Loss': f'{train_loss:.4f}',
@@ -146,8 +161,8 @@ def train_model(
             'Val Acc': f'{val_accuracy:.4f}'
         })
 
-    saved_model_name = os.path.join(save_path, f"{customName}_{epochs}_{val_accuracies[-1]:.4f}.pth")
-    torch.save(model.state_dict(), saved_model_name)
+    saved_model_name = os.path.join(save_path, f"{customName}_{epoch+1}_{best_val_accuracy:.4f}.pth")
+    torch.save(best_model, saved_model_name)
 
     print(f"Model saved to {saved_model_name}")
 
