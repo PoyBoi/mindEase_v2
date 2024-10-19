@@ -9,6 +9,6 @@
     "className": "label",
     "gpuMode": "cuda",
     "epochs": 150,
-    "learningRate": "1e-5",
+    "learningRate": "5e-6",
     "ifPrompt": "How do I know that I am depressed ?"
 }

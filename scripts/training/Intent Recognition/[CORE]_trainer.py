@@ -40,8 +40,6 @@ config = load_config(
     config_path
 )
 
-print("Config Dictionary:", config)
-
 customName, file_loc, ds_folder, model_name, train_file_custom_name, val_file_custom_name, test_file_custom_name, className, gpuMode, epochs, learningRate, ifPrompt = (
     config["customName"],
     config["file_loc"],
