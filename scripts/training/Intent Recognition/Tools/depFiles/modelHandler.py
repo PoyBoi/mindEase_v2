@@ -112,7 +112,7 @@ def validate_one_epoch(model, valid_loader, loss_fn, accuracy, f1_score, device)
 
     return avg_val_loss, avg_val_accuracy, avg_val_f1
 
-def train_model(save_path, model, lr, train_loader, valid_loader, optimizer, scheduler, loss_fn, accuracy, f1_score, epochs, device, customName):
+def train_fold(save_path, model, lr, optimizer, scheduler, train_loader, valid_loader, loss_fn, accuracy, f1_score, epochs, device, customName):
     train_losses, train_accuracies, train_f1_scores = [], [], []
     val_losses, val_accuracies, val_f1_scores = [], [], []
 
@@ -166,7 +166,7 @@ def train_model(save_path, model, lr, train_loader, valid_loader, optimizer, sch
 
     print(f"Model saved to {saved_model_name}")
 
-    # Create the table content separately
+        # Create the table content separately
     table_content = "| Epoch | Train Loss | Train Accuracy | Train F1 | Val Loss | Val Accuracy | Val F1 |\n"
     table_content += "|-------|------------|----------------|----------|----------|--------------|--------|\n"
     for i, (tl, ta, tf, vl, va, vf) in enumerate(zip(train_losses, train_accuracies, train_f1_scores, val_losses, val_accuracies, val_f1_scores)):
@@ -228,8 +228,8 @@ def train_model(save_path, model, lr, train_loader, valid_loader, optimizer, sch
     print(f"Training information saved to {md_file_path}")
 
     return {
-        "epoch": epochs,
-        "avg_val_accuracy": val_accuracies[-1],
+        "epoch": epoch + 1,
+        "avg_val_accuracy": best_val_accuracy,
         "train_accuracies": train_accuracies,
         "val_accuracies": val_accuracies,
         "train_losses": train_losses,
@@ -238,3 +238,42 @@ def train_model(save_path, model, lr, train_loader, valid_loader, optimizer, sch
         "val_f1_scores": val_f1_scores,
         "saved_model_loc": saved_model_name
     }
+
+def train_model(save_path, model, lr, train_loader, valid_loader, optimizer, scheduler, loss_fn, accuracy, f1_score, epochs, device, customName, num_folds=None):
+    if num_folds > 0:
+        # Combine train_loader and valid_loader datasets
+        combined_dataset = torch.utils.data.ConcatDataset([train_loader.dataset, valid_loader.dataset])
+        
+        kf = KFold(n_splits=num_folds, shuffle=True, random_state=42)
+        fold_results = []
+
+        for fold, (train_idx, val_idx) in enumerate(kf.split(range(len(combined_dataset))), 1):
+            print(f"Fold {fold}")
+            
+            train_subsampler = torch.utils.data.SubsetRandomSampler(train_idx)
+            val_subsampler = torch.utils.data.SubsetRandomSampler(val_idx)
+            
+            fold_train_loader = torch.utils.data.DataLoader(combined_dataset, batch_size=train_loader.batch_size, sampler=train_subsampler)
+            fold_valid_loader = torch.utils.data.DataLoader(combined_dataset, batch_size=valid_loader.batch_size, sampler=val_subsampler)
+            
+            model.apply(lambda m: m.reset_parameters() if hasattr(m, 'reset_parameters') else None)
+            fold_optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=0.01)
+            fold_scheduler = ReduceLROnPlateau(fold_optimizer, mode='min', factor=0.1, patience=5, verbose=True)
+            
+            fold_result = train_fold(save_path, model, lr, fold_optimizer, fold_scheduler, fold_train_loader, fold_valid_loader, loss_fn, accuracy, f1_score, epochs, device, f"{customName}_fold_{fold}")
+            fold_results.append(fold_result)
+        
+        # Calculate average performance across folds
+        avg_val_accuracy = sum(result['avg_val_accuracy'] for result in fold_results) / num_folds
+        avg_val_f1 = sum(result['val_f1_scores'][-1] for result in fold_results) / num_folds
+        
+        print(f"\nAverage Validation Accuracy across folds: {avg_val_accuracy:.4f}")
+        print(f"Average Validation F1 Score across folds: {avg_val_f1:.4f}")
+        
+        return {
+            "fold_results": fold_results,
+            "avg_val_accuracy": avg_val_accuracy,
+            "avg_val_f1": avg_val_f1
+        }
+    else:
+        return train_fold(save_path, model, lr, optimizer, scheduler, train_loader, valid_loader, loss_fn, accuracy, f1_score, epochs, device, customName)
