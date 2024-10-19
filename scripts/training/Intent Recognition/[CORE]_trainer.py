@@ -21,7 +21,7 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer, get_
 
 from Tools.depFiles.readJson import load_config
 from Tools.depFiles.datasetHandler import ds_split_set, eval_img
-from Tools.depFiles.modelHandler import model_eval, predict_intent, train_model, train_one_epoch, validate_one_epoch
+from Tools.depFiles.modelHandler import model_eval, predict_intent, train_model, custom_collate
 
 print("\nLoaded all Imports\n")
 
@@ -132,8 +132,8 @@ train_dataset = prepare_data(trainfeatures.values, trainlabels)
 valid_dataset = prepare_data(validfeatures.values, validlabels)
 test_dataset = prepare_data(testfeatures.values, testlabels)
 
-train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
-valid_loader = DataLoader(valid_dataset, batch_size=32)
+train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True, collate_fn=custom_collate)
+valid_loader = DataLoader(valid_dataset, batch_size=32, collate_fn=custom_collate)
 test_loader = DataLoader(test_dataset, batch_size=32)
 
 # loss_fn = nn.BCEWithLogitsLoss()  # Use BCEWithLogitsLoss for multi-label classification
@@ -162,7 +162,7 @@ epoch, avg_val_accuracy, train_accuracies, val_accuracies,
 train_losses, val_losses, train_f1_scores, val_f1_scores, saved_model_loc
 ) = train_model(
     result_path, model, learningRate, train_loader, valid_loader, optimizer, 
-    scheduler, loss_fn, accuracy, f1_score, epochs, device, customName, 1
+    scheduler, loss_fn, accuracy, f1_score, epochs, device, customName, num_folds=2
 ).values()
 
 print("\nFinished Training Model\n")
