@@ -2,10 +2,9 @@
 # Imports
 # ========================================
 
-import os, shutil, warnings, torch, json
+import os, warnings, torch
 from datetime import datetime
 import pandas as pd
-from pprint import pprint
 
 import torch.nn as nn
 import torch.optim as optim
@@ -17,7 +16,6 @@ from pylab import rcParams
 import matplotlib.pyplot as plt
 
 from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import train_test_split
 from transformers import AutoModelForSequenceClassification, AutoTokenizer, get_linear_schedule_with_warmup
 
 from Tools.depFiles.readJson import load_config
