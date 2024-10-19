@@ -37,7 +37,7 @@ config = load_config(
     config_path
 )
 
-customName, file_loc, ds_folder, model_name, train_file_custom_name, val_file_custom_name, test_file_custom_name, className, gpuMode, epochs, learningRate, ifPrompt = (
+customName, file_loc, ds_folder, model_name, train_file_custom_name, val_file_custom_name, test_file_custom_name, className, gpuMode, epochs, learningRate, numFolds, ifPrompt = (
     config["customName"],
     config["file_loc"],
     config["ds_folder"],
@@ -49,6 +49,7 @@ customName, file_loc, ds_folder, model_name, train_file_custom_name, val_file_cu
     config["gpuMode"],
     config["epochs"],
     float(config["learningRate"]),
+    config["numFolds"],
     config["ifPrompt"]
 )
 
@@ -162,7 +163,7 @@ epoch, avg_val_accuracy, train_accuracies, val_accuracies,
 train_losses, val_losses, train_f1_scores, val_f1_scores, saved_model_loc
 ) = train_model(
     result_path, model, learningRate, train_loader, valid_loader, optimizer, 
-    scheduler, loss_fn, accuracy, f1_score, epochs, device, customName, num_folds=2
+    scheduler, loss_fn, accuracy, f1_score, epochs, device, customName, num_folds=numFolds
 ).values()
 
 print("\nFinished Training Model\n")
