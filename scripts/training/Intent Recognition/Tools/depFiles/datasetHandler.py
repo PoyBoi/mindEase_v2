@@ -23,7 +23,6 @@ def ds_split_set(
     test_data.to_csv(os.path.join(ds_folder, test_file_custom_name), index=False)
 
     print("Datasets have been split and saved successfully.")
-    # return []
 
     trainfile = os.path.join(ds_folder, train_file_custom_name)
     validfile = os.path.join(ds_folder, val_file_custom_name)
