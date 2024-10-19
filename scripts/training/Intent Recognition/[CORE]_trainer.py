@@ -30,7 +30,7 @@ print("\nLoaded all Imports\n")
 # User Def Area
 # ========================================
 
-numFolds = 5
+numFolds = 10
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 

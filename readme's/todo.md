@@ -88,6 +88,7 @@
 3. Model Improvement
     - [ ] Apply suggestions from people to improve the validation value
         - Things like changing the LR config, adding gradient descent, adding drop out, etc
+        - [ ] Fix Early stopping, it is VERY flawed, uses local maxima
     
 
 3. NOC:
