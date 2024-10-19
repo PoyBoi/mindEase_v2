@@ -5,6 +5,7 @@
 import os, shutil, warnings, torch, json
 from datetime import datetime
 import pandas as pd
+from pprint import pprint
 
 import torch.nn as nn
 import torch.optim as optim
@@ -29,6 +30,8 @@ print("\nLoaded all Imports\n")
 # User Def Area
 # ========================================
 
+numFolds = 5
+
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
 config_path = os.path.join(current_dir,"training_info.json")
@@ -37,7 +40,9 @@ config = load_config(
     config_path
 )
 
-customName, file_loc, ds_folder, model_name, train_file_custom_name, val_file_custom_name, test_file_custom_name, className, gpuMode, epochs, learningRate, numFolds, ifPrompt = (
+print("Config Dictionary:", config)
+
+customName, file_loc, ds_folder, model_name, train_file_custom_name, val_file_custom_name, test_file_custom_name, className, gpuMode, epochs, learningRate, ifPrompt = (
     config["customName"],
     config["file_loc"],
     config["ds_folder"],
@@ -49,7 +54,6 @@ customName, file_loc, ds_folder, model_name, train_file_custom_name, val_file_cu
     config["gpuMode"],
     config["epochs"],
     float(config["learningRate"]),
-    config["numFolds"],
     config["ifPrompt"]
 )
 
