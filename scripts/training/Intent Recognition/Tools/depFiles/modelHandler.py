@@ -1,5 +1,4 @@
 import os, torch
-import numpy as np
 from tqdm import tqdm
 from datetime import datetime
 from sklearn.model_selection import KFold
@@ -55,22 +54,6 @@ def predict_intent(
     predicted_intent = label_encoder.inverse_transform([predicted_class])[0]
 
     print(f"The predicted intent for '{text}' is: {predicted_intent}")
-
-# def collate_fn(batch):
-#     # Separate inputs and labels
-#     inputs = [item[0] for item in batch]
-#     labels = [item[1] for item in batch]
-    
-#     # Pad the input sequences
-#     inputs_padded = pad_sequence(inputs, batch_first=True, padding_value=0)
-    
-#     # Create attention masks
-#     attention_mask = (inputs_padded != 0).long()
-    
-#     # Convert labels to tensor
-#     labels = torch.tensor(labels)
-    
-#     return inputs_padded, attention_mask, labels
 
 def custom_collate(batch):
     input_ids = [item[0] for item in batch]
